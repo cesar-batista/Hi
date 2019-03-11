@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <title> Hi Technologies </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="author" content="Cesar Batista">
+    <link rel="stylesheet" href="./css/style.css"/>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+  </head>
+  <body>
+    <header id="main-header">
+      <h1>Titulo do Site</h1>
+    </header>
+
+    <main>
+
+      <section id="cadastro">
+        <h2>Cadastro de Estabelecimento</h2>
+        <p><input type="text" id="Nome" placeholder="Nome do Estabelecimento"/></p>
+
+        <div id="result"></div>
+      </section>
+
+
+
+      <input type="search" id="address" class="form-control" placeholder="Endereço do Estabelecimento?" />
+
+      <p>Selected: <strong id="address-value">none</strong></p>
+
+
+     <button onclick="Cadastrar()" type="button" name="Cadastro">Cadastrar</button>
+
+     <div  id="cadastrados" class="w3-container">
+       <h2>Estabelecimentos Cadastados</h2>
+       <ul id="myUL" class="w3-ul">
+       </ul>
+     </div>
+
+
+    </main>
+
+    <footer>&copy; Copyright Shunda 2019</footer>
+  </body>
+</html>
+   <script src="https://cdn.jsdelivr.net/npm/places.js@1.16.1"></script>
+    <script>
+    (function() {
+        var placesAutocomplete = places({
+          appId: 'pl55CF7D4L6X',
+          apiKey: 'b141476b161185b1aedb8a00c96bd571',
+          container: document.querySelector('#address')
+        });
+
+        var $address = document.querySelector('#address-value')
+        placesAutocomplete.on('change', function(e) {
+          $address.textContent = e.suggestion.value
+        });
+
+        placesAutocomplete.on('clear', function() {
+          $address.textContent = 'none';
+        });
+
+      })();
+      </script>
+
+      <script>
+      localStorage.clear();
+
+      // Create a "close" button and append it to each list item
+
+      // Click on a close button to hide the current list item
+
+      var nomes = new Array()
+      var endereços = new Array()
+      var JSONnome;
+      var JSONendereços;
+      function Cadastrar(){
+        //PEGA O NOME DA INPUT
+        var nome = document.getElementById('Nome');
+        //COLOCA o valor na array
+        nomes.push(nome.value);
+        //Tranforma a array in string
+        JSONnomes = JSON.stringify(nomes);
+        //guarda no localStorage
+        localStorage.setItem('Nome',JSONnomes);
+
+        var endereço = document.getElementById('address');
+        endereços.push(endereço.value);
+        JSONendereços = JSON.stringify(endereços);
+        localStorage.setItem('Endereço',JSONendereços);
+        printCards();
+        createCloseButton();
+        CloseButton();
+      }
+      function printCards(){
+        var myUL = document.getElementById('myUL');
+        myUL.innerHTML = '';
+        for(var i = 0; i< nomes.length; i++){
+          var nome = nomes[i];
+          var node = document.createElement("LI");
+          var textnode = document.createTextNode(nome);
+          node.appendChild(textnode);
+          document.getElementById("myUL").appendChild(node);
+        }
+
+      }
+      function createCloseButton(){
+        var myNodelist = document.getElementsByTagName("LI");
+        var i;
+        for (i = 0; i < myNodelist.length; i++) {
+          var span = document.createElement("span");
+          var txt = document.createTextNode("Edit");
+          span.className = "close";
+          span.appendChild(txt);
+          myNodelist[i].appendChild(span);
+        }
+      }
+      function CloseButton(){
+        var close = document.getElementsByClassName("close");
+        var i;
+        for (i = 0; i < close.length; i++) {
+          close[i].onclick = function() {
+            var div = this.parentElement.innerText;
+            var index = nomes.indexOf(div);
+            alert(div);
+          }
+        }
+      }
+
+
+
+
+      </script>
